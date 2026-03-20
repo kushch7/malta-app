@@ -3,14 +3,15 @@ import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
 import places from "../data/places.json";
 
-const MALTA_CENTER = [35.9375, 14.3754];
+const MALTA_CENTER = [35.9, 14.45];
 const MALTA_ZOOM = 11;
 
+// Course venue — 142 St Christopher's Street, Valletta VLT 1465
 const VENUE = {
-    lat: 35.8988,
-    lng: 14.5128,
-    name: "Course Venue",
-    address: "142 St. Christopher\u2019s Street, Valletta",
+    lat: 35.8993,
+    lng: 14.513,
+    name: "Course venue",
+    address: "142 St Christopher's Street, Valletta",
 };
 
 const pinColors = {
@@ -21,23 +22,57 @@ const pinColors = {
     default: "#CF142B",
 };
 
-function createColorPin(color) {
+function createPlacePin(color) {
     return L.divIcon({
         className: "",
-        html: `<div style="width:26px;height:26px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);background:${color};border:2.5px solid white;box-shadow:0 2px 8px rgba(0,0,0,0.22);"></div>`,
+        html: `<div style="
+      width:26px;height:26px;border-radius:50% 50% 50% 0;
+      transform:rotate(-45deg);
+      background:${color};
+      border:2.5px solid white;
+      box-shadow:0 2px 8px rgba(0,0,0,0.22);
+    "></div>`,
         iconSize: [26, 26],
         iconAnchor: [13, 26],
-        popupAnchor: [0, -30],
+        popupAnchor: [0, -28],
     });
 }
 
-const venuePin = L.divIcon({
-    className: "",
-    html: `<div style="width:36px;height:36px;border-radius:50%;background:#1C1917;border:3px solid #FAC775;box-shadow:0 3px 12px rgba(0,0,0,0.35);display:flex;align-items:center;justify-content:center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FAC775" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>`,
-    iconSize: [36, 36],
-    iconAnchor: [18, 36],
-    popupAnchor: [0, -38],
-});
+function createVenuePin() {
+    return L.divIcon({
+        className: "",
+        html: `
+      <div style="
+        display:flex;flex-direction:column;align-items:center;
+      ">
+        <div style="
+          background:#1C1917;color:white;
+          font-family:'DM Sans',sans-serif;
+          font-size:11px;font-weight:500;
+          padding:5px 10px;border-radius:8px;
+          border:2px solid white;
+          box-shadow:0 3px 12px rgba(0,0,0,0.3);
+          white-space:nowrap;letter-spacing:0.01em;
+        ">
+          <span style="margin-right:5px">★</span>Course venue
+        </div>
+        <div style="
+          width:2px;height:8px;
+          background:#1C1917;
+          margin-top:-1px;
+        "></div>
+        <div style="
+          width:8px;height:8px;border-radius:50%;
+          background:#1C1917;
+          margin-top:-1px;
+        "></div>
+      </div>
+    `,
+        iconSize: [130, 44],
+        iconAnchor: [65, 44],
+        popupAnchor: [0, -46],
+    });
+}
 
 const filters = ["All", "Historic", "Nature", "Beaches", "Villages"];
 
@@ -61,6 +96,7 @@ export default function MapPage() {
                 flexDirection: "column",
                 height: "calc(100dvh - var(--nav-h))",
             }}>
+            {/* Search bar */}
             <div
                 style={{
                     padding: "12px 20px",
@@ -98,6 +134,7 @@ export default function MapPage() {
                 </div>
             </div>
 
+            {/* Filter chips */}
             <div
                 className='hide-scrollbar'
                 style={{
@@ -139,116 +176,105 @@ export default function MapPage() {
                 ))}
             </div>
 
-            <div
-                style={{
-                    padding: "8px 16px",
-                    background: "var(--white)",
-                    borderBottom: "1px solid var(--border)",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 8,
-                    flexShrink: 0,
-                }}>
-                <div
-                    style={{
-                        width: 20,
-                        height: 20,
-                        borderRadius: "50%",
-                        background: "#1C1917",
-                        border: "2px solid #FAC775",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        flexShrink: 0,
-                    }}>
-                    <svg
-                        width='9'
-                        height='9'
-                        viewBox='0 0 24 24'
-                        fill='none'
-                        stroke='#FAC775'
-                        strokeWidth='2.5'
-                        strokeLinecap='round'
-                        strokeLinejoin='round'>
-                        <path d='M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z' />
-                    </svg>
-                </div>
-                <span
-                    style={{
-                        fontSize: 12,
-                        color: "var(--ink-2)",
-                        fontWeight: 400,
-                    }}>
-                    Your course venue — 142 St. Christopher&apos;s St, Valletta
-                </span>
-            </div>
-
+            {/* Map area */}
             <div style={{ flex: 1, position: "relative" }}>
                 <MapContainer
                     center={MALTA_CENTER}
                     zoom={MALTA_ZOOM}
                     style={{ width: "100%", height: "100%" }}
-                    zoomControl
+                    zoomControl={true}
                     scrollWheelZoom={false}>
                     <TileLayer
                         url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
                         attribution=''
                     />
 
+                    {/* Course venue — always visible regardless of filter */}
                     <Marker
                         position={[VENUE.lat, VENUE.lng]}
-                        icon={venuePin}
-                        zIndexOffset={1000}
-                        eventHandlers={{
-                            click: () =>
-                                setSelected({
-                                    id: "venue",
-                                    name: VENUE.name,
-                                    tags: [VENUE.address],
-                                    category: "venue",
-                                }),
-                        }}>
+                        icon={createVenuePin()}
+                        zIndexOffset={1000}>
                         <Popup>
-                            <strong
+                            <div
                                 style={{
                                     fontFamily: "var(--font-body)",
-                                    fontSize: 13,
+                                    padding: "2px 0",
                                 }}>
-                                {VENUE.name}
-                            </strong>
-                            <br />
-                            <span
-                                style={{
-                                    fontFamily: "var(--font-body)",
-                                    fontSize: 11,
-                                    color: "#78716C",
-                                }}>
-                                {VENUE.address}
-                            </span>
+                                <p
+                                    style={{
+                                        fontSize: 13,
+                                        fontWeight: 500,
+                                        marginBottom: 2,
+                                    }}>
+                                    {VENUE.name}
+                                </p>
+                                <p style={{ fontSize: 12, color: "#78716C" }}>
+                                    {VENUE.address}
+                                </p>
+                            </div>
                         </Popup>
                     </Marker>
 
+                    {/* Place pins */}
                     {filtered.map((place) => (
                         <Marker
                             key={place.id}
                             position={[place.lat, place.lng]}
-                            icon={createColorPin(
+                            icon={createPlacePin(
                                 pinColors[place.category] || pinColors.default,
                             )}
                             eventHandlers={{ click: () => setSelected(place) }}>
                             <Popup>
-                                <strong
+                                <span
                                     style={{
                                         fontFamily: "var(--font-body)",
                                         fontSize: 13,
+                                        fontWeight: 500,
                                     }}>
                                     {place.name}
-                                </strong>
+                                </span>
                             </Popup>
                         </Marker>
                     ))}
                 </MapContainer>
 
+                {/* Venue legend pill */}
+                <div
+                    style={{
+                        position: "absolute",
+                        top: 12,
+                        right: 12,
+                        background: "white",
+                        borderRadius: 10,
+                        padding: "7px 12px",
+                        boxShadow: "0 2px 12px rgba(0,0,0,0.12)",
+                        border: "1px solid var(--border)",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 6,
+                        zIndex: 500,
+                    }}>
+                    <div
+                        style={{
+                            width: 10,
+                            height: 10,
+                            borderRadius: 2,
+                            background: "#1C1917",
+                            flexShrink: 0,
+                        }}
+                    />
+                    <span
+                        style={{
+                            fontSize: 11,
+                            fontWeight: 500,
+                            color: "var(--ink-2)",
+                            fontFamily: "var(--font-body)",
+                        }}>
+                        Your venue
+                    </span>
+                </div>
+
+                {/* Selected place card */}
                 {selected && (
                     <div
                         style={{
@@ -259,7 +285,7 @@ export default function MapPage() {
                             background: "var(--white)",
                             borderRadius: "var(--r-md)",
                             padding: "14px 16px",
-                            boxShadow: "0 8px 32px rgba(28,25,23,0.14)",
+                            boxShadow: "0 8px 32px rgba(28,25,23,0.15)",
                             border: "1px solid var(--border)",
                             display: "flex",
                             gap: 12,
@@ -268,46 +294,30 @@ export default function MapPage() {
                         }}>
                         <div
                             style={{
-                                width: 40,
-                                height: 40,
+                                width: 42,
+                                height: 42,
                                 borderRadius: "var(--r-sm)",
                                 background:
-                                    selected.category === "venue"
-                                        ? "#1C1917"
-                                        : pinColors[selected.category] ||
-                                          pinColors.default,
+                                    pinColors[selected.category] ||
+                                    pinColors.default,
                                 flexShrink: 0,
                                 display: "flex",
                                 alignItems: "center",
                                 justifyContent: "center",
                             }}>
-                            {selected.category === "venue" ? (
-                                <svg
-                                    width='18'
-                                    height='18'
-                                    viewBox='0 0 24 24'
-                                    fill='none'
-                                    stroke='#FAC775'
-                                    strokeWidth='2'
-                                    strokeLinecap='round'
-                                    strokeLinejoin='round'>
-                                    <path d='M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z' />
-                                    <polyline points='9 22 9 12 15 12 15 22' />
-                                </svg>
-                            ) : (
-                                <svg
-                                    width='18'
-                                    height='18'
-                                    viewBox='0 0 24 24'
-                                    fill='none'
-                                    stroke='white'
-                                    strokeWidth='2'
-                                    strokeLinecap='round'>
-                                    <path d='M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z' />
-                                    <circle cx='12' cy='10' r='3' />
-                                </svg>
-                            )}
+                            <svg
+                                width='18'
+                                height='18'
+                                viewBox='0 0 24 24'
+                                fill='none'
+                                stroke='white'
+                                strokeWidth='2'
+                                strokeLinecap='round'>
+                                <path d='M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z' />
+                                <circle cx='12' cy='10' r='3' />
+                            </svg>
                         </div>
+
                         <div style={{ flex: 1, minWidth: 0 }}>
                             <p
                                 style={{
@@ -330,8 +340,10 @@ export default function MapPage() {
                                 {selected.tags.join(" · ")}
                             </p>
                         </div>
+
                         <button
                             onClick={() => setSelected(null)}
+                            aria-label='Close'
                             style={{
                                 width: 32,
                                 height: 32,

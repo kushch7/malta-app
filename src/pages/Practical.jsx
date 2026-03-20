@@ -1,16 +1,14 @@
-import { useState, useEffect } from "react";
 import ScreenHeader from "../components/ScreenHeader";
+import { useFontSizeContext } from "../context/FontSizeContext";
 import emergency from "../data/emergency.json";
 
-const FONT_KEY = "malta_app_fontsize";
-
 const phrases = [
-    { en: "Hello", mt: "Bong\u0121u" },
+    { en: "Hello", mt: "Bonġu" },
     { en: "Thank you", mt: "Grazzi" },
-    { en: "Please", mt: "Jekk jo\u0121\u0121bok" },
+    { en: "Please", mt: "Jekk jogħġbok" },
     { en: "Where is...?", mt: "Fejn hu...?" },
     { en: "How much?", mt: "Kemm jiswu?" },
-    { en: "Excuse me", mt: "Sku\u017cani" },
+    { en: "Excuse me", mt: "Skużani" },
     { en: "Yes / No", mt: "Iva / Le" },
 ];
 
@@ -120,26 +118,7 @@ function InfoCard({ title, children }) {
 }
 
 export default function Practical() {
-    const [largText, setLargeText] = useState(() => {
-        return localStorage.getItem(FONT_KEY) === "large";
-    });
-
-    useEffect(() => {
-        applyFontSize(largText);
-    }, [largText]);
-
-    function applyFontSize(large) {
-        document.documentElement.style.fontSize = large ? "20px" : "16px";
-        localStorage.setItem(FONT_KEY, large ? "large" : "normal");
-    }
-
-    function toggleFontSize() {
-        setLargeText((prev) => {
-            const next = !prev;
-            applyFontSize(next);
-            return next;
-        });
-    }
+    const { largeText, toggle } = useFontSizeContext();
 
     return (
         <div>
@@ -149,7 +128,7 @@ export default function Practical() {
             />
 
             <div style={{ padding: "20px 20px 0" }}>
-                {/* Weather card */}
+                {/* ── Weather card ── */}
                 <div
                     style={{
                         background:
@@ -211,102 +190,7 @@ export default function Practical() {
                     </svg>
                 </div>
 
-                {/* ── Text size toggle ── */}
-                <SectionTitle>Display</SectionTitle>
-                <div
-                    style={{
-                        background: "var(--white)",
-                        borderRadius: "var(--r-md)",
-                        padding: "14px 16px",
-                        border: "1px solid var(--border)",
-                        marginBottom: 20,
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 14,
-                    }}>
-                    <div style={{ flex: 1 }}>
-                        <p
-                            style={{
-                                fontSize: 14,
-                                fontWeight: 500,
-                                color: "var(--ink)",
-                                marginBottom: 3,
-                            }}>
-                            Text size
-                        </p>
-                        <p
-                            style={{
-                                fontSize: 12,
-                                color: "var(--ink-3)",
-                                fontWeight: 300,
-                                lineHeight: 1.5,
-                            }}>
-                            {largText
-                                ? "Large text is on — easier to read"
-                                : "Switch to larger text if needed"}
-                        </p>
-                    </div>
-                    <div
-                        style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 0,
-                            border: "1px solid var(--border)",
-                            borderRadius: "var(--r-sm)",
-                            overflow: "hidden",
-                            flexShrink: 0,
-                        }}>
-                        <button
-                            onClick={() => {
-                                if (largText) toggleFontSize();
-                            }}
-                            style={{
-                                padding: "9px 16px",
-                                fontSize: 15,
-                                fontWeight: 500,
-                                fontFamily: "var(--font-body)",
-                                background: !largText
-                                    ? "var(--red)"
-                                    : "transparent",
-                                color: !largText ? "white" : "var(--ink-3)",
-                                border: "none",
-                                cursor: "pointer",
-                                transition: "all 0.18s",
-                                lineHeight: 1,
-                            }}>
-                            A
-                        </button>
-                        <div
-                            style={{
-                                width: 1,
-                                alignSelf: "stretch",
-                                background: "var(--border)",
-                            }}
-                        />
-                        <button
-                            onClick={() => {
-                                if (!largText) toggleFontSize();
-                            }}
-                            style={{
-                                padding: "9px 16px",
-                                fontSize: 20,
-                                fontWeight: 500,
-                                fontFamily: "var(--font-body)",
-                                background: largText
-                                    ? "var(--red)"
-                                    : "transparent",
-                                color: largText ? "white" : "var(--ink-3)",
-                                border: "none",
-                                cursor: "pointer",
-                                transition: "all 0.18s",
-                                lineHeight: 1,
-                            }}>
-                            A
-                        </button>
-                    </div>
-                </div>
-
-                {/* Emergency numbers */}
+                {/* ── Emergency numbers ── */}
                 <SectionTitle>Emergency numbers</SectionTitle>
                 {emergency.map((item) => (
                     <div
@@ -374,9 +258,9 @@ export default function Practical() {
                     </div>
                 ))}
 
-                {/* Money */}
+                {/* ── Money ── */}
                 <SectionTitle>Money &amp; currency</SectionTitle>
-                <InfoCard title='Currency: Euro (\u20ac)'>
+                <InfoCard title='Currency: Euro (€)'>
                     <p
                         style={{
                             fontSize: 13,
@@ -385,13 +269,13 @@ export default function Practical() {
                             fontWeight: 300,
                         }}>
                         Malta uses the Euro. ATMs are widely available in
-                        Valletta, Sliema and St Julian&apos;s. Most restaurants
-                        and shops accept Visa/Mastercard. Tip 10% in restaurants
-                        if not included.
+                        Valletta, Sliema and St Julian's. Most restaurants and
+                        shops accept Visa/Mastercard. Tip 10% in restaurants if
+                        service is not included.
                     </p>
                 </InfoCard>
 
-                {/* SIM */}
+                {/* ── SIM ── */}
                 <SectionTitle>SIM &amp; internet</SectionTitle>
                 <InfoCard title='Stay connected'>
                     <p
@@ -408,7 +292,7 @@ export default function Practical() {
                     </p>
                 </InfoCard>
 
-                {/* Phrases */}
+                {/* ── Phrases ── */}
                 <SectionTitle>Useful Maltese phrases</SectionTitle>
                 <InfoCard>
                     <table
@@ -448,6 +332,141 @@ export default function Practical() {
                         </tbody>
                     </table>
                 </InfoCard>
+
+                {/* ── Display settings ── */}
+                <SectionTitle>Display</SectionTitle>
+                <div
+                    style={{
+                        background: "var(--white)",
+                        borderRadius: "var(--r-md)",
+                        border: "1px solid var(--border)",
+                        marginBottom: 8,
+                        overflow: "hidden",
+                    }}>
+                    <div
+                        style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 14,
+                            padding: "16px 18px",
+                        }}>
+                        {/* Aa icon */}
+                        <div
+                            style={{
+                                width: 44,
+                                height: 44,
+                                borderRadius: "var(--r-sm)",
+                                background: largeText
+                                    ? "var(--red-light)"
+                                    : "var(--stone)",
+                                flexShrink: 0,
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                transition: "background 0.2s",
+                            }}>
+                            <span
+                                style={{
+                                    fontFamily: "var(--font-display)",
+                                    fontSize: 20,
+                                    fontWeight: 500,
+                                    color: largeText
+                                        ? "var(--red)"
+                                        : "var(--ink-3)",
+                                    lineHeight: 1,
+                                    transition: "color 0.2s",
+                                    userSelect: "none",
+                                }}>
+                                Aa
+                            </span>
+                        </div>
+
+                        <div style={{ flex: 1 }}>
+                            <p
+                                style={{
+                                    fontSize: 14,
+                                    fontWeight: 500,
+                                    color: "var(--ink)",
+                                    marginBottom: 2,
+                                }}>
+                                Text size
+                            </p>
+                            <p
+                                style={{
+                                    fontSize: 12,
+                                    color: "var(--ink-3)",
+                                    fontWeight: 300,
+                                }}>
+                                {largeText
+                                    ? "Large — easier to read"
+                                    : "Normal — default size"}
+                            </p>
+                        </div>
+
+                        {/* Toggle switch */}
+                        <button
+                            role='switch'
+                            aria-checked={largeText}
+                            aria-label='Toggle large text'
+                            onClick={toggle}
+                            style={{
+                                width: 50,
+                                height: 28,
+                                borderRadius: 14,
+                                background: largeText
+                                    ? "var(--red)"
+                                    : "var(--border)",
+                                border: "none",
+                                cursor: "pointer",
+                                position: "relative",
+                                flexShrink: 0,
+                                transition: "background 0.22s",
+                                padding: 0,
+                            }}>
+                            <span
+                                style={{
+                                    position: "absolute",
+                                    top: 3,
+                                    left: largeText ? 25 : 3,
+                                    width: 22,
+                                    height: 22,
+                                    borderRadius: "50%",
+                                    background: "white",
+                                    boxShadow: "0 1px 4px rgba(0,0,0,0.18)",
+                                    transition:
+                                        "left 0.22s cubic-bezier(0.34,1.56,0.64,1)",
+                                    display: "block",
+                                }}
+                            />
+                        </button>
+                    </div>
+
+                    {/* Hint row */}
+                    <div
+                        style={{
+                            padding: "10px 18px 14px",
+                            borderTop: "1px solid var(--border)",
+                            background: largeText
+                                ? "var(--red-light)"
+                                : "var(--stone)",
+                            transition: "background 0.2s",
+                        }}>
+                        <p
+                            style={{
+                                fontSize: 12,
+                                fontWeight: 300,
+                                color: largeText
+                                    ? "var(--red-dark)"
+                                    : "var(--ink-3)",
+                                lineHeight: 1.55,
+                                transition: "color 0.2s",
+                            }}>
+                            {largeText
+                                ? "Large text is on — all content in the app is scaled up for easier reading."
+                                : "Turn on large text if you find the default size hard to read."}
+                        </p>
+                    </div>
+                </div>
 
                 <div style={{ height: 16 }} />
             </div>

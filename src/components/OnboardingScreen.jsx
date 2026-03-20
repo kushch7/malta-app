@@ -1,0 +1,299 @@
+import { useState } from "react";
+
+const STORAGE_KEY = "malta-app-onboarded";
+
+const steps = [
+    {
+        icon: (
+            <svg
+                width='28'
+                height='28'
+                viewBox='0 0 24 24'
+                fill='none'
+                stroke='var(--red)'
+                strokeWidth='1.8'
+                strokeLinecap='round'
+                strokeLinejoin='round'>
+                <line x1='1' y1='1' x2='23' y2='23' />
+                <path d='M16.72 11.06A10.94 10.94 0 0 1 19 12.55' />
+                <path d='M5 12.55a10.94 10.94 0 0 1 5.17-2.39' />
+                <path d='M10.71 5.05A16 16 0 0 1 22.56 9' />
+                <path d='M1.42 9a15.91 15.91 0 0 1 4.7-2.88' />
+                <path d='M8.53 16.11a6 6 0 0 1 6.95 0' />
+                <line x1='12' y1='20' x2='12.01' y2='20' />
+            </svg>
+        ),
+        title: "Works without internet",
+        desc: "All transport, maps, and emergency info are saved on your device. No signal needed.",
+    },
+    {
+        icon: (
+            <svg
+                width='28'
+                height='28'
+                viewBox='0 0 24 24'
+                fill='none'
+                stroke='var(--red)'
+                strokeWidth='1.8'
+                strokeLinecap='round'
+                strokeLinejoin='round'>
+                <rect x='3' y='11' width='18' height='11' rx='2' ry='2' />
+                <path d='M7 11V7a5 5 0 0 1 10 0v4' />
+            </svg>
+        ),
+        title: "No login required",
+        desc: "Open the app and go. No account, no password, no waiting.",
+    },
+    {
+        icon: (
+            <svg
+                width='28'
+                height='28'
+                viewBox='0 0 24 24'
+                fill='none'
+                stroke='var(--red)'
+                strokeWidth='1.8'
+                strokeLinecap='round'
+                strokeLinejoin='round'>
+                <path d='M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.6 1.2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.77a16 16 0 0 0 6.29 6.29l.95-.95a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z' />
+            </svg>
+        ),
+        title: "Emergency contacts one tap away",
+        desc: "Tap the Info tab at any time to call 112 or Mater Dei Hospital instantly.",
+    },
+];
+
+export default function OnboardingScreen() {
+    const [visible, setVisible] = useState(() => {
+        try {
+            return localStorage.getItem(STORAGE_KEY) !== "true";
+        } catch {
+            return false;
+        }
+    });
+    const [leaving, setLeaving] = useState(false);
+
+    if (!visible) return null;
+
+    const handleDone = () => {
+        setLeaving(true);
+        try {
+            localStorage.setItem(STORAGE_KEY, "true");
+        } catch {}
+        setTimeout(() => setVisible(false), 380);
+    };
+
+    return (
+        <div
+            role='dialog'
+            aria-modal='true'
+            aria-label='Welcome to Malta Guide'
+            style={{
+                position: "fixed",
+                inset: 0,
+                zIndex: 2000,
+                display: "flex",
+                flexDirection: "column",
+                background: "var(--cream)",
+                opacity: leaving ? 0 : 1,
+                transform: leaving ? "scale(0.96)" : "scale(1)",
+                transition: "opacity 0.35s ease, transform 0.35s ease",
+            }}>
+            {/* Red hero */}
+            <div
+                style={{
+                    background: "var(--red)",
+                    padding: "56px 32px 36px",
+                    position: "relative",
+                    overflow: "hidden",
+                    flexShrink: 0,
+                }}>
+                <div
+                    style={{
+                        position: "absolute",
+                        inset: 0,
+                        opacity: 0.09,
+                        backgroundImage:
+                            "repeating-linear-gradient(45deg,#fff 0,#fff 1px,transparent 0,transparent 50%)",
+                        backgroundSize: "14px 14px",
+                    }}
+                />
+                <div
+                    style={{
+                        position: "absolute",
+                        top: 20,
+                        right: 24,
+                        opacity: 0.14,
+                        width: 56,
+                        height: 56,
+                    }}>
+                    <div
+                        style={{
+                            position: "absolute",
+                            width: 7,
+                            height: 56,
+                            left: 24,
+                            top: 0,
+                            background: "white",
+                            borderRadius: 2,
+                        }}
+                    />
+                    <div
+                        style={{
+                            position: "absolute",
+                            width: 56,
+                            height: 7,
+                            top: 24,
+                            left: 0,
+                            background: "white",
+                            borderRadius: 2,
+                        }}
+                    />
+                </div>
+
+                <p
+                    style={{
+                        fontSize: 12,
+                        fontWeight: 500,
+                        color: "rgba(255,255,255,0.65)",
+                        letterSpacing: "0.1em",
+                        textTransform: "uppercase",
+                        marginBottom: 8,
+                        fontFamily: "var(--font-body)",
+                    }}>
+                    Educational courses · Malta
+                </p>
+                <h1
+                    style={{
+                        fontFamily: "var(--font-display)",
+                        fontSize: 40,
+                        fontWeight: 500,
+                        color: "white",
+                        lineHeight: 1.05,
+                        letterSpacing: "-0.01em",
+                    }}>
+                    Welcome to
+                    <br />
+                    Malta Guide
+                </h1>
+                <p
+                    style={{
+                        fontSize: 15,
+                        color: "rgba(255,255,255,0.75)",
+                        marginTop: 8,
+                        fontWeight: 300,
+                        fontFamily: "var(--font-body)",
+                    }}>
+                    Everything you need for your stay
+                </p>
+            </div>
+
+            {/* Steps */}
+            <div style={{ flex: 1, padding: "28px 24px", overflowY: "auto" }}>
+                <div
+                    style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 16,
+                        marginBottom: 28,
+                    }}>
+                    {steps.map((step, i) => (
+                        <div
+                            key={i}
+                            style={{
+                                display: "flex",
+                                gap: 16,
+                                alignItems: "flex-start",
+                                background: "var(--white)",
+                                borderRadius: "var(--r-md)",
+                                padding: "16px 18px",
+                                border: "1px solid var(--border)",
+                                opacity: 0,
+                                animation: `fadeUp 0.4s ease ${0.1 + i * 0.1}s both`,
+                            }}>
+                            <div
+                                style={{
+                                    width: 50,
+                                    height: 50,
+                                    borderRadius: 12,
+                                    background: "var(--red-light)",
+                                    flexShrink: 0,
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                }}>
+                                {step.icon}
+                            </div>
+                            <div>
+                                <p
+                                    style={{
+                                        fontSize: 15,
+                                        fontWeight: 500,
+                                        color: "var(--ink)",
+                                        marginBottom: 4,
+                                        fontFamily: "var(--font-body)",
+                                    }}>
+                                    {step.title}
+                                </p>
+                                <p
+                                    style={{
+                                        fontSize: 13,
+                                        color: "var(--ink-3)",
+                                        lineHeight: 1.6,
+                                        fontWeight: 300,
+                                        fontFamily: "var(--font-body)",
+                                    }}>
+                                    {step.desc}
+                                </p>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+
+                <button
+                    onClick={handleDone}
+                    style={{
+                        width: "100%",
+                        padding: "16px 24px",
+                        background: "var(--red)",
+                        color: "white",
+                        border: "none",
+                        borderRadius: "var(--r-md)",
+                        fontSize: 16,
+                        fontWeight: 500,
+                        fontFamily: "var(--font-body)",
+                        cursor: "pointer",
+                        letterSpacing: "0.01em",
+                        boxShadow: "0 4px 16px rgba(207,20,43,0.3)",
+                        transition: "transform 0.15s, box-shadow 0.15s",
+                    }}
+                    onPointerDown={(e) =>
+                        (e.currentTarget.style.transform = "scale(0.98)")
+                    }
+                    onPointerUp={(e) =>
+                        (e.currentTarget.style.transform = "scale(1)")
+                    }>
+                    Get started
+                </button>
+
+                <p
+                    style={{
+                        textAlign: "center",
+                        fontSize: 12,
+                        color: "var(--ink-4)",
+                        marginTop: 14,
+                        fontFamily: "var(--font-body)",
+                    }}>
+                    You won't see this again
+                </p>
+            </div>
+
+            <style>{`
+        @keyframes fadeUp {
+          from { opacity: 0; transform: translateY(12px); }
+          to   { opacity: 1; transform: none; }
+        }
+      `}</style>
+        </div>
+    );
+}
