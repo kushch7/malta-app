@@ -1,6 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import { useWeather } from "../hooks/useWeather";
 
+const HEADSTART_LOGO =
+    "https://headstart.technology/wp-content/uploads/2019/05/Headstart-logo-05.png";
+const EUROPASS_LOGO =
+    "https://digitiseproject.eu/wp-content/uploads/2022/10/EuroPass-Logo.png";
+
 function WeatherIcon({ icon, size = 18 }) {
     if (icon === "sun")
         return (
@@ -13,11 +18,11 @@ function WeatherIcon({ icon, size = 18 }) {
                 strokeWidth='1.8'
                 strokeLinecap='round'>
                 <circle cx='12' cy='12' r='5' />
-                <line x1='12' y1='1' x2='12' y2='3' />
+                <line x1='12' y1='1' x2='12' y2='3' />{" "}
                 <line x1='12' y1='21' x2='12' y2='23' />
                 <line x1='4.22' y1='4.22' x2='5.64' y2='5.64' />
                 <line x1='18.36' y1='18.36' x2='19.78' y2='19.78' />
-                <line x1='1' y1='12' x2='3' y2='12' />
+                <line x1='1' y1='12' x2='3' y2='12' />{" "}
                 <line x1='21' y1='12' x2='23' y2='12' />
                 <line x1='4.22' y1='19.78' x2='5.64' y2='18.36' />
                 <line x1='18.36' y1='5.64' x2='19.78' y2='4.22' />
@@ -53,7 +58,6 @@ function WeatherIcon({ icon, size = 18 }) {
                 <polyline points='13 11 9 17 15 17 11 23' />
             </svg>
         );
-    // cloud (default)
     return (
         <svg
             width={size}
@@ -136,7 +140,7 @@ export default function Home() {
 
     return (
         <div>
-            {/* Hero */}
+            {/* ── Hero ── */}
             <div
                 style={{
                     background: "var(--red)",
@@ -213,7 +217,7 @@ export default function Home() {
                     Your guide to the Maltese Islands
                 </p>
 
-                {/* Live weather strip inside hero */}
+                {/* Live weather strip */}
                 {weather && (
                     <div
                         style={{
@@ -223,7 +227,6 @@ export default function Home() {
                             background: "rgba(0,0,0,0.2)",
                             borderRadius: "var(--r-sm)",
                             padding: "10px 14px",
-                            marginBottom: 0,
                             position: "relative",
                         }}>
                         <WeatherIcon icon={weather.icon} size={22} />
@@ -260,7 +263,6 @@ export default function Home() {
                     </div>
                 )}
 
-                {/* White wave cutoff */}
                 <div
                     style={{
                         height: 16,
@@ -272,7 +274,7 @@ export default function Home() {
                 />
             </div>
 
-            {/* Body */}
+            {/* ── Body ── */}
             <div style={{ padding: "4px 20px 0" }}>
                 {/* Emergency strip */}
                 <div
@@ -344,6 +346,154 @@ export default function Home() {
                     </svg>
                 </div>
 
+                {/* ── Partner logos ── */}
+                <p
+                    style={{
+                        fontSize: 11,
+                        fontWeight: 500,
+                        color: "var(--ink-3)",
+                        letterSpacing: "0.08em",
+                        textTransform: "uppercase",
+                        marginBottom: 12,
+                    }}>
+                    Organised by
+                </p>
+                <div
+                    style={{
+                        background: "var(--white)",
+                        borderRadius: "var(--r-md)",
+                        border: "1px solid var(--border)",
+                        padding: "18px 20px",
+                        marginBottom: 28,
+                    }}>
+                    <div
+                        style={{
+                            display: "grid",
+                            gridTemplateColumns: "1fr 1px 1fr",
+                            gap: 0,
+                            alignItems: "center",
+                        }}>
+                        {/* Headstart */}
+                        <a
+                            href='https://headstart.technology'
+                            target='_blank'
+                            rel='noreferrer'
+                            aria-label='Headstart Technology Ltd, Malta'
+                            style={{
+                                display: "flex",
+                                flexDirection: "column",
+                                alignItems: "center",
+                                gap: 8,
+                                padding: "4px 12px",
+                                textDecoration: "none",
+                            }}>
+                            <img
+                                src={HEADSTART_LOGO}
+                                alt='Headstart Technology Ltd'
+                                style={{
+                                    height: 52,
+                                    width: "auto",
+                                    maxWidth: "100%",
+                                    objectFit: "contain",
+                                    display: "block",
+                                }}
+                                onError={(e) => {
+                                    e.currentTarget.style.display = "none";
+                                    e.currentTarget.nextSibling.style.display =
+                                        "flex";
+                                }}
+                            />
+                            {/* Text fallback if image fails */}
+                            <span
+                                style={{
+                                    display: "none",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    height: 52,
+                                    fontSize: 13,
+                                    fontWeight: 500,
+                                    color: "var(--ink-2)",
+                                    textAlign: "center",
+                                }}>
+                                Headstart Technology
+                            </span>
+                            <span
+                                style={{
+                                    fontSize: 11,
+                                    color: "var(--ink-4)",
+                                    fontWeight: 300,
+                                    textAlign: "center",
+                                }}>
+                                Malta
+                            </span>
+                        </a>
+
+                        {/* Divider */}
+                        <div
+                            style={{
+                                width: 1,
+                                height: 60,
+                                background: "var(--border)",
+                            }}
+                        />
+
+                        {/* Europass Teacher Academy */}
+                        <a
+                            href='https://www.teacheracademy.eu'
+                            target='_blank'
+                            rel='noreferrer'
+                            aria-label='Europass Teacher Academy'
+                            style={{
+                                display: "flex",
+                                flexDirection: "column",
+                                alignItems: "center",
+                                gap: 8,
+                                padding: "4px 12px",
+                                textDecoration: "none",
+                            }}>
+                            <img
+                                src={EUROPASS_LOGO}
+                                alt='Europass Teacher Academy'
+                                style={{
+                                    height: 52,
+                                    width: "auto",
+                                    maxWidth: "100%",
+                                    objectFit: "contain",
+                                    display: "block",
+                                }}
+                                onError={(e) => {
+                                    e.currentTarget.style.display = "none";
+                                    e.currentTarget.nextSibling.style.display =
+                                        "flex";
+                                }}
+                            />
+                            {/* Text fallback if image fails */}
+                            <span
+                                style={{
+                                    display: "none",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    height: 52,
+                                    fontSize: 13,
+                                    fontWeight: 500,
+                                    color: "var(--ink-2)",
+                                    textAlign: "center",
+                                }}>
+                                Europass Teacher Academy
+                            </span>
+                            <span
+                                style={{
+                                    fontSize: 11,
+                                    color: "var(--ink-4)",
+                                    fontWeight: 300,
+                                    textAlign: "center",
+                                }}>
+                                Teacher Academy
+                            </span>
+                        </a>
+                    </div>
+                </div>
+
                 {/* Quick tiles */}
                 <p
                     style={{
@@ -356,7 +506,6 @@ export default function Home() {
                     }}>
                     Explore Malta
                 </p>
-
                 <div
                     style={{
                         display: "grid",
@@ -444,7 +593,7 @@ export default function Home() {
                     />
                 </div>
 
-                {/* Tip */}
+                {/* Today's tip */}
                 <p
                     style={{
                         fontSize: 11,
