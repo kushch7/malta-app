@@ -1,3 +1,4 @@
+import { Analytics } from "@vercel/analytics/react";
 import { useContext } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { FontSizeProvider, FontSizeContext } from "./context/FontSizeContext";
@@ -17,7 +18,7 @@ function AppShell() {
     return (
         /*
          * Outer wrapper: full-viewport, clips overflow.
-         * OfflineBanner + OnboardingScreen are position:fixed and sit
+         * OfflineBanner + OnboardingScreen are position: fixed and sit
          * OUTSIDE the scale wrapper so they are never distorted.
          */
         <div
@@ -31,7 +32,6 @@ function AppShell() {
             }}>
             <OfflineBanner />
             <OnboardingScreen />
-
             {/*
              * Scale wrapper — uses scale3d (GPU-accelerated, iOS-safe).
              * Width and height are divided by scale so the visual result
@@ -72,6 +72,7 @@ function AppShell() {
             which would break inside a transformed ancestor on iOS. */}
                 <BottomNav />
             </div>
+            <Analytics />;
         </div>
     );
 }
