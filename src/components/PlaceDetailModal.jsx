@@ -14,7 +14,10 @@ export default function PlaceDetailModal({ place, onClose }) {
     const { data, loading } = useWikipedia(place?.wikipediaTitle);
     const accentColor = catColors[place?.category] || catColors.default;
 
-    // Block body scroll while open
+    // localImage served from public/ → always offline.
+    // Fall back to Wikipedia URL if local file isn't present yet.
+    const imageSrc = place?.localImage || data?.imageUrl || null;
+
     useEffect(() => {
         if (isOpen) document.body.style.overflow = "hidden";
         return () => {
@@ -22,7 +25,6 @@ export default function PlaceDetailModal({ place, onClose }) {
         };
     }, [isOpen]);
 
-    // Close on Escape
     useEffect(() => {
         const handler = (e) => {
             if (e.key === "Escape") onClose();
@@ -66,12 +68,6 @@ export default function PlaceDetailModal({ place, onClose }) {
                     borderRadius: "22px 22px 0 0",
                     zIndex: 600,
                     transition: "transform 0.35s cubic-bezier(0.32,0.72,0,1)",
-                    /*
-                     * maxHeight must leave room for the bottom nav bar.
-                     * We subtract var(--nav-h) so the sheet never slides under it.
-                     * On iOS with a home indicator we also respect safe-area-inset-bottom
-                     * via the env() fallback.
-                     */
                     maxHeight: "calc(88dvh - var(--nav-h))",
                     display: "flex",
                     flexDirection: "column",
@@ -103,9 +99,9 @@ export default function PlaceDetailModal({ place, onClose }) {
                         margin: "12px 16px 0",
                         borderRadius: "var(--r-md)",
                     }}>
-                    {data?.imageUrl && (
+                    {imageSrc && (
                         <img
-                            src={data.imageUrl}
+                            src={imageSrc}
                             alt={place?.name}
                             style={{
                                 position: "absolute",
@@ -114,21 +110,24 @@ export default function PlaceDetailModal({ place, onClose }) {
                                 height: "100%",
                                 objectFit: "cover",
                             }}
+                            onError={(e) => {
+                                e.currentTarget.style.display = "none";
+                            }}
                         />
                     )}
 
-                    {/* Gradient scrim so close button is always visible */}
+                    {/* Scrim so close button stays readable over any image */}
                     <div
                         style={{
                             position: "absolute",
                             inset: 0,
                             background:
-                                "linear-gradient(to bottom, rgba(0,0,0,0.25) 0%, transparent 40%)",
+                                "linear-gradient(to bottom, rgba(0,0,0,0.28) 0%, transparent 45%)",
                             pointerEvents: "none",
                         }}
                     />
 
-                    {!data?.imageUrl && (
+                    {!imageSrc && (
                         <span
                             style={{
                                 fontFamily: "var(--font-display)",
@@ -176,12 +175,7 @@ export default function PlaceDetailModal({ place, onClose }) {
                     </button>
                 </div>
 
-                {/*
-                 * Scrollable content.
-                 * padding-bottom = nav bar height + 24px breathing room
-                 * + env(safe-area-inset-bottom) for iPhone home indicator.
-                 * This ensures the Wikipedia link is always reachable above the nav.
-                 */}
+                {/* Scrollable content */}
                 <div
                     style={{
                         overflowY: "auto",
@@ -232,7 +226,7 @@ export default function PlaceDetailModal({ place, onClose }) {
                         ))}
                     </div>
 
-                    {/* Description — shimmer skeleton while loading */}
+                    {/* Description — shimmer while loading */}
                     {loading && (
                         <div
                             style={{
@@ -279,7 +273,7 @@ export default function PlaceDetailModal({ place, onClose }) {
                         </p>
                     )}
 
-                    {/* Wikipedia link — always visible above the nav bar thanks to padding */}
+                    {/* Wikipedia link */}
                     {data?.pageUrl && (
                         <a
                             href={data.pageUrl}
@@ -294,7 +288,7 @@ export default function PlaceDetailModal({ place, onClose }) {
                                 color: accentColor,
                                 fontWeight: 500,
                                 textDecoration: "none",
-                                minHeight: 44 /* accessible tap target */,
+                                minHeight: 44,
                                 padding: "10px 0",
                             }}>
                             Read more on Wikipedia

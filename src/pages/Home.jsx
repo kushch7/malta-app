@@ -424,7 +424,7 @@ export default function Home() {
                                     fontWeight: 300,
                                     textAlign: "center",
                                 }}>
-                                Malta
+                                Headstart Technology
                             </span>
                         </a>
 
@@ -488,7 +488,7 @@ export default function Home() {
                                     fontWeight: 300,
                                     textAlign: "center",
                                 }}>
-                                Teacher Academy
+                                Europass Teacher Academy
                             </span>
                         </a>
                     </div>

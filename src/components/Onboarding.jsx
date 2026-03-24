@@ -64,7 +64,7 @@ const steps = [
 ];
 
 const EUROPASS_LOGO =
-    "https://www.teacheracademy.eu/wp-content/themes/epta/img/logo-europass-teacher-academy.svg";
+    "https://digitiseproject.eu/wp-content/uploads/2022/10/EuroPass-Logo.png";
 const HEADSTART_LOGO =
     "https://headstart.technology/wp-content/uploads/2019/05/Headstart-logo-05.png";
 
@@ -328,46 +328,6 @@ export default function OnboardingScreen() {
                             gap: 24,
                             flexWrap: "wrap",
                         }}>
-                        {/* Europass Teacher Academy */}
-                        <a
-                            href='https://www.teacheracademy.eu'
-                            target='_blank'
-                            rel='noreferrer'
-                            style={{
-                                display: "flex",
-                                alignItems: "center",
-                                textDecoration: "none",
-                                flexShrink: 0,
-                            }}>
-                            <img
-                                src={EUROPASS_LOGO}
-                                alt='Europass Teacher Academy'
-                                style={{
-                                    height: 36,
-                                    width: "auto",
-                                    maxWidth: 160,
-                                    objectFit: "contain",
-                                    display: "block",
-                                }}
-                                onError={(e) => {
-                                    // Fallback: render text logo if image fails
-                                    e.currentTarget.style.display = "none";
-                                    e.currentTarget.parentElement.innerHTML =
-                                        '<span style="font-size:12px;font-weight:500;color:#1C1917;font-family:sans-serif">Europass Teacher Academy</span>';
-                                }}
-                            />
-                        </a>
-
-                        {/* Divider */}
-                        <div
-                            style={{
-                                width: 1,
-                                height: 28,
-                                background: "var(--border)",
-                                flexShrink: 0,
-                            }}
-                        />
-
                         {/* Headstart Technology */}
                         <a
                             href='https://headstart.technology'
@@ -393,6 +353,46 @@ export default function OnboardingScreen() {
                                     e.currentTarget.style.display = "none";
                                     e.currentTarget.parentElement.innerHTML =
                                         '<span style="font-size:12px;font-weight:500;color:#1C1917;font-family:sans-serif">Headstart Technology</span>';
+                                }}
+                            />
+                        </a>
+
+                        {/* Divider */}
+                        <div
+                            style={{
+                                width: 1,
+                                height: 28,
+                                background: "var(--border)",
+                                flexShrink: 0,
+                            }}
+                        />
+
+                        {/* Europass Teacher Academy */}
+                        <a
+                            href='https://www.teacheracademy.eu'
+                            target='_blank'
+                            rel='noreferrer'
+                            style={{
+                                display: "flex",
+                                alignItems: "center",
+                                textDecoration: "none",
+                                flexShrink: 0,
+                            }}>
+                            <img
+                                src={EUROPASS_LOGO}
+                                alt='Europass Teacher Academy'
+                                style={{
+                                    height: 24,
+                                    width: "auto",
+                                    maxWidth: 160,
+                                    objectFit: "contain",
+                                    display: "block",
+                                }}
+                                onError={(e) => {
+                                    // Fallback: render text logo if image fails
+                                    e.currentTarget.style.display = "none";
+                                    e.currentTarget.parentElement.innerHTML =
+                                        '<span style="font-size:12px;font-weight:500;color:#1C1917;font-family:sans-serif">Europass Teacher Academy</span>';
                                 }}
                             />
                         </a>

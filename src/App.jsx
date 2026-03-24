@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { FontSizeProvider, FontSizeContext } from "./context/FontSizeContext";
 import OfflineBanner from "./components/OfflineBanner";
-import OnboardingScreen from "./components/OnboardingScreen";
+import OnboardingScreen from "./components/Onboarding.jsx";
 import BottomNav from "./components/BottomNav";
 import Home from "./pages/Home";
 import Places from "./pages/Places";

@@ -4,23 +4,23 @@ const gradients = {
     valletta: "linear-gradient(135deg, #7B2C3A, #CF142B)",
     mdina: "linear-gradient(135deg, #4A3728, #8B6A52)",
     gozo: "linear-gradient(135deg, #1A4A3A, #2D7A60)",
-    marsaxlokk: "linear-gradient(135deg, #1A3A5C, #2466A8)",
+    dingli: "linear-gradient(135deg, #2A3A1A, #3A6A2A)",
     blueLagoon: "linear-gradient(135deg, #1A4A6A, #1A7AAA)",
     goldenBay: "linear-gradient(135deg, #6A4A1A, #C8841A)",
-    mellieha: "linear-gradient(135deg, #1A3A5C, #2D6A9E)",
-    stPetersPool: "linear-gradient(135deg, #1A4A5A, #1A8A9A)",
-    dingli: "linear-gradient(135deg, #2A3A1A, #3A6A2A)",
-    buskett: "linear-gradient(135deg, #1A3A1A, #2A6A2A)",
-    popeyeVillage: "linear-gradient(135deg, #3A2A1A, #8A5A2A)",
-    hagarQim: "linear-gradient(135deg, #4A3A2A, #9A7A4A)",
-    sliema: "linear-gradient(135deg, #1A3A5A, #2A5A8A)",
-    fortStAngelo: "linear-gradient(135deg, #3A1A1A, #8A2A2A)",
+    marsaxlokk: "linear-gradient(135deg, #1A3A5C, #2466A8)",
+    sliema: "linear-gradient(135deg, #1A3A5C, #2A5A8A)",
     default: "linear-gradient(135deg, #8B0D1C, #CF142B)",
 };
 
 export default function PlaceCard({ place, onClick }) {
+    // Wikipedia hook is still called so text is pre-fetched for the modal
     const { data } = useWikipedia(place.wikipediaTitle);
+
     const gradient = gradients[place.id] || gradients.default;
+    // localImage is served from public/ and is always available offline.
+    // If it hasn't been downloaded yet (dev mode), we fall back to the
+    // Wikipedia thumbnail URL that the hook provides.
+    const imageSrc = place.localImage || data?.imageUrl || null;
 
     return (
         <div
@@ -37,7 +37,7 @@ export default function PlaceCard({ place, onClick }) {
                 border: "1px solid var(--border)",
                 cursor: "pointer",
             }}>
-            {/* Image — Wikipedia thumbnail with gradient fallback */}
+            {/* Image */}
             <div
                 style={{
                     height: 160,
@@ -48,9 +48,9 @@ export default function PlaceCard({ place, onClick }) {
                     alignItems: "center",
                     justifyContent: "center",
                 }}>
-                {data?.imageUrl && (
+                {imageSrc && (
                     <img
-                        src={data.imageUrl}
+                        src={imageSrc}
                         alt={place.name}
                         loading='lazy'
                         onError={(e) => {
@@ -65,7 +65,8 @@ export default function PlaceCard({ place, onClick }) {
                         }}
                     />
                 )}
-                {/* Category pill overlaid on image */}
+
+                {/* Category pill */}
                 <div
                     style={{
                         position: "absolute",
@@ -89,7 +90,8 @@ export default function PlaceCard({ place, onClick }) {
                         {place.category}
                     </span>
                 </div>
-                {/* Subtle gradient scrim so text is legible */}
+
+                {/* Gradient scrim */}
                 <div
                     style={{
                         position: "absolute",
